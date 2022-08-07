@@ -1,0 +1,103 @@
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@500&display=swap');
+h1,h2,h3{
+    font-family: 'Oswald';
+    font-size: 70px;
+    font-weight: 700;
+    color: white;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Oswald&display=swap');
+p,body{
+    font-family: 'Oswald';
+    font-size: 20px;
+    font-weight: 400;
+    color: white;
+}
+
+.MAIN_BG{
+    background-color: #000000;
+}
+.Logo{
+    max-width: 100%;
+    width: 73px;
+}
+.btn0{
+    cursor: pointer;
+    outline: currentcolor none medium;
+    padding: 5px 27px;
+    background-color: transparent;
+    color: rgb(255, 255, 255);
+    transition: all 0.2s ease 0s;
+    font-family: 'Oswald';
+    min-height: 36px;
+    display: flex;
+    -moz-box-pack: center;
+    justify-content: center;
+    -moz-box-align: center;
+    align-items: center;
+    border: 2px solid rgb(255, 255, 255);
+    border-radius: 20px;
+  
+}
+.btn0:hover{
+    background-color: rgba(255, 255, 255, 0.314);
+}
+.navbar-toggler{
+    background-color: white;
+}
+.icon{
+    padding: 6px;
+    color: white;
+    font-size: 22px;
+    border: 2px solid rgb(255, 255, 255);
+    border-radius: 40px;
+}
+.icon:hover{
+    background-color: rgba(255, 255, 255, 0.314);
+}
+
+.icon0{
+    padding-top: 9px;
+    height: 40px;
+    
+  width: 40px;
+    color: white;
+    font-size: 22px;
+    border: 2px solid rgb(255, 255, 255);
+    border-radius: 100px;
+}
+.icon0:hover{
+    background-color: rgba(255, 255, 255, 0.314);
+}
+.background{
+    background-color: #1d1f1e;
+    padding: 50px;
+    padding-bottom: 60px;
+    border-radius: 15px;
+    margin-left: 45px;
+    
+}
+.btn1{
+    width: 500px;
+    height: 57px;
+    background-color: #808080;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 30px;
+    font-weight: 400;
+}
+.gif{
+    max-width: 100%;
+    width: 400px !important;
+}
+.model{
+    margin-left: -85px;
+}
+@media only screen and (max-width: 600px) {
+  .background{
+   margin-left: 0px;
+   
+
+  }
+  }
