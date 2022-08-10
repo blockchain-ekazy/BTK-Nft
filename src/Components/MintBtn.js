@@ -56,19 +56,7 @@ export default function Home() {
     //   return;
     // }
 
-    if (status == 1) {
-      await toast.promise(
-        ct.methods
-          .phase1mint(quantity)
-          .send({ from: metamaskAddress, value: p }),
-        {
-          pending: "Mint in Progress!!",
-          success: "Mint Success!!",
-          error: "Mint Failed!!",
-        }
-      );
-      return;
-    }  else if (status == 2) {
+    if (status == 3) {
       await toast.promise(
         ct.methods.mint(quantity).send({ from: metamaskAddress, value: p }),
         {
@@ -122,7 +110,7 @@ export default function Home() {
     if (status == 0) {
       toast.error("Sale not Started!");
       return false;
-    }  else if (status == 2) {
+    } else if (status == 3) {
       setWalletConnected(true);
     }
   };
@@ -130,8 +118,6 @@ export default function Home() {
   return (
     <div className="">
       <div className="container-fluid  ">
-       
-
         <div className="row hy  px-2 justify-content-center">
           <div className="col-12 ">
             {/* <h4 className="text-white py-4">
@@ -148,16 +134,16 @@ export default function Home() {
               <br />
               <small>Max per Address: {maxallowed}</small>
             </h4> */}
-            
+
             <br />
             <div className="row pt-2 ">
               <div className="col-6 text-left">
                 <p className="  text-gold">TOTAL COST:</p>
               </div>
               <div className="col-6 text-right">
-              <p className="text-gold">
-                {((price / 10 ** 18) * quantity).toFixed(2)}ETH
-              </p>
+                <p className="text-gold">
+                  {((price / 10 ** 18) * quantity).toFixed(2)}ETH
+                </p>
               </div>
             </div>
 
@@ -190,22 +176,18 @@ export default function Home() {
             <br />
             <br />
 
-         
             {walletConnected ? (
               <button onClick={loadweb3} className="Mint-button">
                 MINT
-             
               </button>
             ) : (
               <button onClick={connectWallet} className="Mint-button">
                 CONNECT
-              
               </button>
             )}
           </div>
         </div>
       </div>
-      
     </div>
   );
 }
