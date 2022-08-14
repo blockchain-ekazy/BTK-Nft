@@ -4,41 +4,30 @@ import Web3 from "web3";
 import detectEthereumProvider from "@metamask/detect-provider";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-// import { MerkleTree } from "merkletreejs";
-// import keccak256 from "keccak256";
-// import { white } from "./whitelist.js";
+
+import {
+  PayWithCard,
+  PaperCheckout,
+  PaperCheckoutDisplay,
+} from "@paperxyz/react-client-sdk";
 
 import "./Home.css";
 import "./MintBtn.css";
 
 export default function Home() {
   const REACT_APP_CONTRACT_ADDRESS =
-    "0x4060B84A4Fbf6F6Ef982780ac3482E1E9DF48830";
+    "0x39E9DE389c62102A754403e9fD8408A4FDf677c4";
   const SELECTEDNETWORK = "4";
-  const SELECTEDNETWORKNAME = "Ethereum";
+  const SELECTEDNETWORKNAME = "Ethereum Rinkeby";
 
   const [quantity, setQuantity] = useState(1);
-  const [status, setStatus] = useState(0);
+  const [status, setStatus] = useState(false);
   const [price, setPrice] = useState("X");
   const [maxallowed, setMaxallowed] = useState(0);
   const [walletConnected, setWalletConnected] = useState(false);
   const [metamaskAddress, setMetamaskAddress] = useState("");
   let ct, web3;
-  // const leaf = white.map((addr) => keccak256(addr));
-  // const merkleTree = new MerkleTree(leaf, keccak256, { sortPairs: true });
 
-  // function checkWhitelist(a) {
-  //   const check = keccak256(a);
-  //   const proof = merkleTree.getHexProof(check);
-  //   const root = merkleTree.getRoot();
-
-  //   return merkleTree.verify(proof, check, root);
-  // }
-
-  // function getProof(a) {
-  //   const check = keccak256(a);
-  //   return merkleTree.getHexProof(check);
-  // }
   const loadweb3 = async () => {
     if (!initializeWeb3()) return;
     if (!connectWallet()) return;
@@ -49,16 +38,11 @@ export default function Home() {
       return;
     }
 
-    // let m = await ct.methods.balanceOf(metamaskAddress).call();
-
-    // if (m >= maxallowed) {
-    //   toast.error("Already Minted Maximum Allowed!");
-    //   return;
-    // }
-
-    if (status == 3) {
+    if (!status) {
       await toast.promise(
-        ct.methods.mint(quantity).send({ from: metamaskAddress, value: p }),
+        ct.methods
+          .claimTo(metamaskAddress, quantity)
+          .send({ from: metamaskAddress, value: p }),
         {
           pending: "Mint in Progress!!",
           success: "Mint Success!!",
@@ -87,9 +71,9 @@ export default function Home() {
       if (!checkNetwork()) return false;
 
       ct = new web3.eth.Contract(abi, REACT_APP_CONTRACT_ADDRESS);
-      setStatus(await ct.methods.status().call());
-      setPrice(await ct.methods.PRICE().call());
-      setMaxallowed(await ct.methods.MAX_PER_Transtion().call());
+      setStatus(await ct.methods.paused().call());
+      setPrice(await ct.methods.price().call());
+      setMaxallowed(await ct.methods.maxMintAmountPerTx().call());
       return true;
     } else {
       toast.error(
@@ -100,18 +84,17 @@ export default function Home() {
   };
 
   const connectWallet = async () => {
-    // console.log(merkleTree.getRoot().toString("hex"));
     if (!initializeWeb3()) return false;
     await window.ethereum.enable();
     let m = await web3.eth.getAccounts();
     m = m[0];
     setMetamaskAddress(m);
 
-    if (status == 0) {
-      toast.error("Sale not Started!");
-      return false;
-    } else if (status == 3) {
+    if (!status) {
       setWalletConnected(true);
+      return false;
+    } else {
+      toast.error("Sale not Started!");
     }
   };
 
@@ -120,21 +103,6 @@ export default function Home() {
       <div className="container-fluid  ">
         <div className="row hy  px-2 justify-content-center">
           <div className="col-12 ">
-            {/* <h4 className="text-white py-4">
-              <small>
-                {status == 1 || status == 2
-                  ? "PRE SALE ACTIVE"
-                  : status == 3
-                  ? "PUBLIC SALE ACTIVE"
-                  : "SALE NOT ACTIVE"}
-              </small>
-              <small>
-              Price: {((price / 10 ** 18) * quantity).toFixed(2)}ETH
-              </small>
-              <br />
-              <small>Max per Address: {maxallowed}</small>
-            </h4> */}
-
             <br />
             <div className="row pt-2 ">
               <div className="col-6 text-left">
@@ -142,7 +110,7 @@ export default function Home() {
               </div>
               <div className="col-6 text-right">
                 <p className="text-gold">
-                  {((price / 10 ** 18) * quantity).toFixed(2)}ETH
+                  {((price / 10 ** 18) * quantity).toFixed(3)}ETH
                 </p>
               </div>
             </div>
@@ -174,17 +142,25 @@ export default function Home() {
             </div>
 
             <br />
-            <br />
-
-            {walletConnected ? (
-              <button onClick={loadweb3} className="Mint-button">
-                MINT
-              </button>
-            ) : (
-              <button onClick={connectWallet} className="Mint-button">
-                CONNECT
-              </button>
-            )}
+            <div className="row">
+              <div className="col-md-6">
+                {walletConnected ? (
+                  <button onClick={loadweb3} className="Mint-button">
+                    MINT
+                  </button>
+                ) : (
+                  <button onClick={connectWallet} className="Mint-button">
+                    CONNECT
+                  </button>
+                )}
+              </div>
+              <div className="col-md-6 paper">
+                <PaperCheckout
+                  checkoutId="70e08b7f-c528-46af-8b17-76b0e0ade641"
+                  display="DRAWER"
+                />
+              </div>
+            </div>
           </div>
         </div>
       </div>
