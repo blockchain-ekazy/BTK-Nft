@@ -16,12 +16,13 @@ import "./MintBtn.css";
 
 export default function Home() {
   const REACT_APP_CONTRACT_ADDRESS =
-    "0x39E9DE389c62102A754403e9fD8408A4FDf677c4";
-  const SELECTEDNETWORK = "4";
+    "0xd72Ef21EB4FE26dC8930d548436bb9868edA2193";
+  const SELECTEDNETWORK = "1";
   const SELECTEDNETWORKNAME = "Ethereum Rinkeby";
 
   const [quantity, setQuantity] = useState(1);
   const [status, setStatus] = useState(false);
+  const [total, setTotal] = useState(0);
   const [price, setPrice] = useState("X");
   const [maxallowed, setMaxallowed] = useState(0);
   const [walletConnected, setWalletConnected] = useState(false);
@@ -74,6 +75,8 @@ export default function Home() {
       setStatus(await ct.methods.paused().call());
       setPrice(await ct.methods.price().call());
       setMaxallowed(await ct.methods.maxMintAmountPerTx().call());
+      setTotal(await ct.methods.totalSupply().call());
+
       return true;
     } else {
       toast.error(
@@ -99,71 +102,98 @@ export default function Home() {
   };
 
   return (
-    <div className="">
-      <div className="container-fluid  ">
-        <div className="row hy  px-2 justify-content-center">
-          <div className="col-12 ">
-            <br />
-            <div className="row pt-2 ">
-              <div className="col-6 text-left">
-                <p className="  text-gold">TOTAL COST:</p>
-              </div>
-              <div className="col-6 text-right">
-                <p className="text-gold">
-                  {((price / 10 ** 18) * quantity).toFixed(3)}ETH
-                </p>
-              </div>
-            </div>
+    <>
+      <div className="col-md-6 background ">
+        <div className="row ">
+          <div className="col-6 text-left">
+            <p>TOTAL MINTS: {total} / 1000</p>
+          </div>
+          <div className="col-6 text-right ">
+            {/* <p>BALANCE: 0.0000 ETH</p> */}
+          </div>
+        </div>
+        <div className="row pt-2">
+          <div className="col-6 text-left">
+            <p>MAX AMOUNT TO MINT:</p>
+          </div>
+          <div className="col-6 text-right  ">
+            <p>1000</p>
+          </div>
+        </div>
+        <div className="row pt-2 ">
+          <div className="col-6 text-left">
+            <p>COST PER MINT:</p>
+          </div>
+          <div className="col-6 text-right">
+            <p>1 Eth</p>
+          </div>
+        </div>
 
-            <div className="quantityselector d-flex justify-content-center align-items-center pb-2">
-              <button
-                className="count btn mx-4 "
-                onClick={() => setQuantity(quantity - 1)}
-                disabled={quantity <= 1}
-              >
-                -
-              </button>
-              <span className="quantity ">
-                {quantity}
-                <span
-                  className="d-block text-white maxbtn p-1"
-                  onClick={() => setQuantity(maxallowed)}
+        <div className="container-fluid text-center ">
+          <div className="row hy  px-2 justify-content-center">
+            <div className="col-12 ">
+              <br />
+              <div className="row pt-2 ">
+                <div className="col-6 text-left">
+                  <p className="  text-gold">TOTAL COST:</p>
+                </div>
+                <div className="col-6 text-right">
+                  <p className="text-gold">
+                    {((price / 10 ** 18) * quantity).toFixed(3)}ETH
+                  </p>
+                </div>
+              </div>
+
+              <div className="quantityselector d-flex justify-content-center align-items-center pb-2">
+                <button
+                  className="count btn mx-4 "
+                  onClick={() => setQuantity(quantity - 1)}
+                  disabled={quantity <= 1}
                 >
-                  MAX
+                  -
+                </button>
+                <span className="quantity text-center">
+                  {quantity}
+                  <span
+                    className="d-block text-white maxbtn p-1"
+                    onClick={() => setQuantity(maxallowed)}
+                  >
+                    MAX
+                  </span>
                 </span>
-              </span>
-              <button
-                className="count btn mx-3 "
-                onClick={() => setQuantity(quantity + 1)}
-                disabled={quantity >= maxallowed}
-              >
-                +
-              </button>
-            </div>
-
-            <br />
-            <div className="row">
-              <div className="col-md-6">
-                {walletConnected ? (
-                  <button onClick={loadweb3} className="Mint-button">
-                    MINT
-                  </button>
-                ) : (
-                  <button onClick={connectWallet} className="Mint-button">
-                    CONNECT
-                  </button>
-                )}
+                <button
+                  className="count btn mx-3 "
+                  onClick={() => setQuantity(quantity + 1)}
+                  disabled={quantity >= maxallowed}
+                >
+                  +
+                </button>
               </div>
-              <div className="col-md-6 paper">
-                <PaperCheckout
-                  checkoutId="70e08b7f-c528-46af-8b17-76b0e0ade641"
-                  display="DRAWER"
-                />
+
+              <br />
+              <div className="row">
+                <div className="col-md-6">
+                  {walletConnected ? (
+                    <button onClick={loadweb3} className="Mint-button">
+                      MINT
+                    </button>
+                  ) : (
+                    <button onClick={connectWallet} className="Mint-button">
+                      CONNECT
+                    </button>
+                  )}
+                </div>
+                <div className="col-md-6 paper">
+                  <PaperCheckout
+                    checkoutId="ee5b92bb-9709-4766-ad9d-3941206fd8c8"
+                    display="DRAWER"
+                  />
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }

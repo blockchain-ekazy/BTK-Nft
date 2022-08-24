@@ -69,7 +69,7 @@ export default function Home() {
       </div>
       <div className="container">
         <div className="row mx-1 pt-4 pb-5 align-items-center ">
-          <div className="col-md-6 background ">
+          {/* <div className="col-md-6 background ">
             <div className="row ">
               <div className="col-6 text-left">
                 <p>TOTAL MINTS: 1 / 1000</p>
@@ -95,10 +95,9 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="text-center">
-              <MintBtn />
-            </div>
-          </div>
+            <div className="text-center"></div>
+          </div> */}
+          <MintBtn />
           <div className="col-md-6 text-center model mx-auto pt-3  ">
             <img className="w-100 gif " src={Img2} />
             <p className="pt-4">
